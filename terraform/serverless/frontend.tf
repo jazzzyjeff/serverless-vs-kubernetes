@@ -35,7 +35,7 @@ module "object" {
   key          = "index.html"
   content_type = "text/html"
 
-  file_source = "../frontend/index.html"
+  file_source = "../../frontend/index.html"
 
   tags = local.default_tags
 }
