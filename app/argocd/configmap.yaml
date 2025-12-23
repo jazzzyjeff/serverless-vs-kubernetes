@@ -12,5 +12,6 @@ data:
     <body>
       <h1>Hello from Kubernetes 👋</h1>
       <p>Deployed via Argo CD</p>
+      <p>Testing out sync push</p>
     </body>
     </html>
