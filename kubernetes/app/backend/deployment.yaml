@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: 052275556902.dkr.ecr.eu-west-2.amazonaws.com/dualstack:backend
+          image: 052275556902.dkr.ecr.eu-west-2.amazonaws.com/dualstack:backend-2
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
