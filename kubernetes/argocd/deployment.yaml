@@ -1,26 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-ui
+  name: svk-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello-ui
+      app: svk-app
   template:
     metadata:
       labels:
-        app: hello-ui
+        app: svk-app
     spec:
       containers:
-        - name: nginx
-          image: nginx:alpine
+        - name: app
+          image: 052275556902.dkr.ecr.eu-west-2.amazonaws.com/dualstack:latest
           ports:
-            - containerPort: 80
-          volumeMounts:
-            - name: html
-              mountPath: /usr/share/nginx/html
-      volumes:
-        - name: html
-          configMap:
-            name: hello-ui
+            - containerPort: 8000
