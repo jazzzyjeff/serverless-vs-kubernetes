@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: xxx.dkr.ecr.xxx.amazonaws.com/dualstack:backend
+          image: 052275556902.dkr.ecr.eu-west-2.amazonaws.com/dualstack:latest
           ports:
             - containerPort: 8000
       imagePullSecrets:
