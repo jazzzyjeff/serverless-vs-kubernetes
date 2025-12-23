@@ -1,3 +1,29 @@
+module "ecr" {
+  source = "terraform-aws-modules/ecr/aws"
+
+  repository_name = var.service
+
+  repository_lifecycle_policy = jsonencode({
+    rules = [
+      {
+        rulePriority = 1,
+        description  = "Keep last 30 images",
+        selection = {
+          tagStatus     = "tagged",
+          tagPrefixList = ["v"],
+          countType     = "imageCountMoreThan",
+          countNumber   = 30
+        },
+        action = {
+          type = "expire"
+        }
+      }
+    ]
+  })
+
+  tags = local.default_tags
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.0"
@@ -15,7 +41,7 @@ module "eks" {
 
   access_entries = {
     root = {
-      principal_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      principal_arn = "arn:aws:iam::${data.aws_caller_identity.this.account_id}:root"
       policy_arn    = "arn:aws:iam::aws:policy/AmazonEKSClusterAdminPolicy"
     }
   }
