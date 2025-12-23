@@ -5,3 +5,7 @@ variable "service" {
 variable "domain" {
   type = string
 }
+
+variable "host" {
+  type = string
+}
