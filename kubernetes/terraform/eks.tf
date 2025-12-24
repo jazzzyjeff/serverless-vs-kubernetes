@@ -59,7 +59,14 @@ module "eks" {
   access_entries = {
     root = {
       principal_arn = "arn:aws:iam::${data.aws_caller_identity.this.account_id}:root"
-      policy_arn    = "arn:aws:iam::aws:policy/AmazonEKSClusterAdminPolicy"
+      policy_associations = {
+        default = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+          access_scope = {
+            type = "cluster"
+          }
+        }
+      }
     }
   }
 
@@ -72,7 +79,7 @@ module "eks" {
       max_size     = 3
       desired_size = 1
 
-      instance_types = ["t3.medium"]
+      instance_types = ["t3.small"]
       capacity_type  = "ON_DEMAND"
 
       subnet_ids = module.vpc.private_subnets
@@ -96,4 +103,14 @@ module "eks" {
   }
 
   tags = local.default_tags
+}
+
+resource "aws_eks_access_policy_association" "argocd" {
+  cluster_name  = module.eks.cluster_name
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  principal_arn = module.argocd.arn
+
+  access_scope {
+    type = "cluster"
+  }
 }

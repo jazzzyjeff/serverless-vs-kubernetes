@@ -5,7 +5,7 @@ metadata:
   labels:
     app: frontend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: frontend
@@ -34,4 +34,3 @@ spec:
             periodSeconds: 20
       # imagePullSecrets:
       #   - name: myawscred #local
-
