@@ -24,6 +24,23 @@ module "ecr" {
   tags = local.default_tags
 }
 
+module "irsa" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+
+  name = "AmazonEKSLoadBalancerControllerRole"
+
+  attach_load_balancer_controller_policy = true
+
+  oidc_providers = {
+    eks = {
+      provider_arn = module.eks.oidc_provider_arn
+      namespace_service_accounts = [
+        "kube-system:aws-load-balancer-controller"
+      ]
+    }
+  }
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.0"
@@ -49,32 +66,32 @@ module "eks" {
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
-  # eks_managed_node_groups = {
-  #   EKS_Node_Group = {
-  #     min_size     = 1
-  #     max_size     = 3
-  #     desired_size = 1
+  eks_managed_node_groups = {
+    default = {
+      min_size     = 1
+      max_size     = 3
+      desired_size = 1
 
-  #     instance_types = ["t3.medium"]
-  #     capacity_type  = "ON_DEMAND"
+      instance_types = ["t3.medium"]
+      capacity_type  = "ON_DEMAND"
 
-  #     subnet_ids = module.vpc.private_subnets
-  #   }
-  # }
+      subnet_ids = module.vpc.private_subnets
+
+      iam_role_additional_policies = {
+        ecr = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+        ssm = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      }
+    }
+  }
 
   addons = {
-    coredns = {
-      most_recent = true
-    }
-    kube-proxy = {
-      most_recent = true
-    }
+    coredns    = {}
+    kube-proxy = {}
     vpc-cni = {
-      most_recent = true
+      before_compute = true
     }
     eks-pod-identity-agent = {
       before_compute = true
-      most_recent    = true
     }
   }
 
