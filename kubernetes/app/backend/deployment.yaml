@@ -5,7 +5,7 @@ metadata:
   labels:
     app: backend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: backend
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: xxx.dkr.ecr.eu-west-2.amazonaws.com/dualstack:backend
+          image: 052275556902.dkr.ecr.eu-west-2.amazonaws.com/dualstack:backend
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
@@ -32,6 +32,5 @@ spec:
               port: 8000
             initialDelaySeconds: 10
             periodSeconds: 20
-      imagePullSecrets:
-        - name: myawscred
-
+      # imagePullSecrets:
+      #   - name: myawscred #local

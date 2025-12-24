@@ -12,7 +12,7 @@ resource "aws_eks_capability" "default" {
       }
       namespace = "argocd"
       rbac_role_mapping {
-        role = "EDITOR"
+        role = "ADMIN"
         identity {
           id   = aws_identitystore_group.default.group_id
           type = "SSO_GROUP"

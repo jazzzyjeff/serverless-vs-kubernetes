@@ -7,11 +7,11 @@ spec:
   project: default
   source:
     repoURL: https://github.com/jazzytoor/serverless-vs-kubernetes
-    targetRevision: feat/argocd 
+    targetRevision: main
     path: kubernetes/app/frontend
   destination:
-    server: https://kubernetes.default.svc
-    namespace: demo
+    server: arn:aws:eks:eu-west-2:052275556902:cluster/dualstack
+    namespace: default
   syncPolicy:
     automated:
       prune: true
