@@ -19,7 +19,8 @@ spec:
           image: 052275556902.dkr.ecr.eu-west-2.amazonaws.com/dualstack:backend
           imagePullPolicy: Always
           ports:
-            - containerPort: 8000
+          - name: http
+            containerPort: 8000
           readinessProbe:
             httpGet:
               path: /
