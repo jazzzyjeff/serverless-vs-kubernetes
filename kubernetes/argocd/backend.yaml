@@ -13,7 +13,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/jazzytoor/serverless-vs-kubernetes
-    targetRevision: chore/k8s
+    targetRevision: HEAD
     path: kubernetes/app/backend
   destination:
     server: https://kubernetes.default.svc
