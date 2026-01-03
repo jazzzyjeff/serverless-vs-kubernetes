@@ -1,5 +1,7 @@
 data "aws_caller_identity" "this" {}
 
+data "aws_ecr_authorization_token" "token" {}
+
 data "aws_eks_cluster_auth" "eks" {
   name = module.eks.cluster_name
 }

@@ -1,34 +1,39 @@
 ## Usage
-- Build and push the docker image by the following commands
+1. Copy the template variables file:
 
-  ```bash
-    # Build image
-    docker build -f kubernetes/docker/Dockerfile -t dualstack .
+    ```bash
+    cp kubernetes/terraform/variables.auto.tfvars.tmpl kubernetes/terraform/variables.auto.tfvars
+    ```
+2. Update the variables in variables.auto.tfvars:
 
-    # Tag
-    docker tag dualstack:latest xxx.dkr.ecr.xxx.amazonaws.com/dualstack:latest
+    | Variable  | Description                       | Type   |
+    | --------- | --------------------------------- | ------ |
+    | `region`  | AWS region (e.g., `eu-west-2`)    | String |
+    | `service` | Service name / project identifier | String |
+    | `host`    | Docker daemon address             | String |
+3. Run the following Terraform commands to deploy infrastructure
 
-    # AWS ECR login
-    aws ecr get-login-password --region xxx | docker login --username AWS --password-stdin xxx.dkr.ecr.xxx.amazonaws.com
+    ```bash
+    cd kubernetes/terraform
 
-    # Push
-    docker push xxx.dkr.ecr.xxx.amazonaws.com/dualstack:latest
-  ```
+    terraform init
+    terraform plan
+    terraform apply -auto-approve
+    ```
+2. Once Argocd is deployed to the EKS via the Helm chart we need to get the password and port forward the server in order to access the console.
 
-- Once Argocd is deployed to the EKS via the Helm chart we need to get the password and port forward the server in order to access the console.
+    ```bash
+    # Get password for admin user account
+    kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 
-  ```bash
-  # Get password for admin user account
-  kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+    # Update kubectl config
+    aws eks update-kubeconfig --region eu-west-2 --name my-cluster
 
-  # Update kubectl config
-  aws eks update-kubeconfig --region eu-west-2 --name my-cluster
+    # Port forward the argocd server
+    kubectl port-forward svc/argocd-server -n argocd 8080:443
 
-  # Port forward the argocd server
-  kubectl port-forward svc/argocd-server -n argocd 8080:443
-
-  # Access the console via https://localhost:8080
-  ```
+    # Access the console via https://localhost:8080
+    ```
 
 - Run the following commands in order to deploy the applications to Argocd.
 
@@ -39,9 +44,9 @@
 
 ### Locally
 
-- Docker desktop requires AWS ECR access in order to pull down the image, this can be done by `kubectl create secret docker-registry myawscred -n xxx --docker-server=xxx.dkr.ecr.xxx.amazonaws.com --docker-username=AWS --docker-password="$(aws ecr get-login-password --region xxx)"`.
+1. Docker desktop requires AWS ECR access in order to pull down the image, this can be done by `kubectl create secret docker-registry myawscred -n xxx --docker-server=xxx.dkr.ecr.xxx.amazonaws.com --docker-username=AWS --docker-password="$(aws ecr get-login-password --region xxx)"`.
 
-- In order to use Argo CD locally you can run the following steps
+2. In order to use Argo CD locally you can run the following steps
   1. Ensure Docker Desktop is running with Kubernetes enabled.
   2. `kubectl create namespace argocd`.
   3. Deploy Argo CD locally you can run the following command `kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`.
@@ -49,4 +54,4 @@
   5. Username to be `admin` and password you can get by running the following command `kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo`
   6. Now you can access by `https://localhost:8080/`
 
-- Can run the following command to create the Argocd application `kubectl apply -f kubernetes/argocd/frontend.yaml`.
+3. Can run the following command to create the Argocd application `kubectl apply -f kubernetes/argocd/frontend.yaml`.
