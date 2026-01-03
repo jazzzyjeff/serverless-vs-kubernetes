@@ -9,7 +9,10 @@ resource "helm_release" "argocd" {
 
   values = [file("argocd.yaml")]
 
-  depends_on = [module.eks]
+  depends_on = [
+    module.eks,
+    helm_release.aws_lbc
+  ]
 }
 
 resource "helm_release" "updater" {

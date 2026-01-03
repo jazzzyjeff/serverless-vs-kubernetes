@@ -4,7 +4,7 @@ FROM --platform=linux/amd64 nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy your static site
-COPY frontend/index.html /usr/share/nginx/html/
+COPY index.html /usr/share/nginx/html/
 
 EXPOSE 80
 
