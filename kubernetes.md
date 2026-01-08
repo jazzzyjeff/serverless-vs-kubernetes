@@ -1,4 +1,4 @@
-## ☸️ Kubernetes Manifests & Core Concepts
+## Kubernetes Manifests & Core Concepts
 
 - **Pod**
   Kubernetes’ smallest deployable unit, comprising one or more containers that share networking, storage, and lifecycle.

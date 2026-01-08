@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to serverless-vs-kubernetes 👋</h1>
+# Welcome to serverless-vs-kubernetes
 
 ## ✨ Overview
 
