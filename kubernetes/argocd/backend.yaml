@@ -12,7 +12,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/jazzytoor/serverless-vs-kubernetes
+    repoURL: https://github.com/jazzzyjeff/serverless-vs-kubernetes
     targetRevision: HEAD
     path: kubernetes/app/backend
   destination:
