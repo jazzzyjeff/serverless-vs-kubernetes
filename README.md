@@ -38,4 +38,4 @@ The *exact same code* is deployed using two different architectures.
 
 ## Author
 
-👤 **Jazz**
+👤 **Jazzy Jeff**
